@@ -185,6 +185,19 @@ RUN make -j 8
 # need to run it once as root to link up libs
 RUN src/imaptest || true
 
+WORKDIR /srv
+RUN git config --global http.sslverify false && \
+    git clone https://github.com/fastmail/JMAP-TestSuite.git \
+    JMAP-TestSuite.git
+
+WORKDIR /srv/JMAP-TestSuite.git
+RUN cpanm --installdeps .
+
+# for cassandane
+RUN apt-get -y install libxml-simple-perl libdata-guid-perl
+RUN cpanm IO::File::fcntl
+WORKDIR /tmp
+
 
 ENTRYPOINT [ "/srv/cyrus-docker-release.git/entrypoint.sh" ]
 
