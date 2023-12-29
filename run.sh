@@ -27,17 +27,17 @@ export XAPIAN_CONFIG=$CYRUSLIBS/bin/xapian-config-1.5
 make -j 8
 make sieve/test
 make -j 8 check
-sudo make install
-sudo make install-binsymlinks
-sudo cp tools/mkimap /usr/cyrus/bin/mkimap
-sudo /bin/bash ./libtool --mode=install install -o root -m 755 sieve/test $TARGET/bin/sieve-test
+make install
+make install-binsymlinks
+cp tools/mkimap /usr/cyrus/bin/mkimap
+/bin/bash ./libtool --mode=install install -o root -m 755 sieve/test $TARGET/bin/sieve-test
 
 # ipv6 is a crime
 grep -v ::1 /etc/hosts > /tmp/hosts
-sudo mv /tmp/hosts /etc/hosts
+cat /tmp/hosts > /etc/hosts
 
 # now that Cyrus is installed, let's test it with a full cassandane run!
-sudo mkdir -p /tmp/cass
+sudo install -o cyrus -g mail -d /tmp/cass
 cd /srv/cyrus-imapd.git/cassandane/
 make -j 8
 sudo -u cyrus ./testrunner.pl -f pretty -j 4 --config /srv/cyrus-docker-release.git/cassandane.ini
