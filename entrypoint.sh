@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /srv/cyrus-docker-test-server.git
+cd /srv/cyrus-docker-release.git
 
 if [ "X$REFRESH" != "X" ]; then
   git fetch
