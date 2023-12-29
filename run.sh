@@ -15,19 +15,22 @@ tar -zxf /srv/cyrus-imapd.git/cyrus-imapd-*.tar.gz
 cd cyrus-imapd-*
 
 # this is the basic build
-LIBSDIR=/usr/local/cyruslibs
+CYRUSLIBS=/usr/local/cyruslibs
 TARGET=/usr/cyrus
-export PKG_CONFIG_PATH="$LIBSDIR/lib/x86_64-linux-gnu/pkgconfig:$LIBSDIR/lib/pkgconfig:\$PKG_CONFIG_PATH"
+export LDFLAGS="-L$CYRUSLIBS/lib/x86_64-linux-gnu -L$CYRUSLIBS/lib -Wl,-rpath,$CYRUSLIBS/lib/x86_64-linux-gnu -Wl,-rpath,$CYRUSLIBS/lib"
+export PKG_CONFIG_PATH="$CYRUSLIBS/lib/x86_64-linux-gnu/pkgconfig:$CYRUSLIBS/lib/pkgconfig:\$PKG_CONFIG_PATH"
+export PATH=$CYRUSLIBS/bin:$PATH
 export CFLAGS="-g -fPIC -W -Wall -Wextra -Werror"
-export CXXFLAGS="-g -fPIC -W -Wall -Wextra -Werror"
-export PATH="$LIBSDIR/bin:$PATH"
-./configure --enable-jmap --enable-http --enable-calalarmd --enable-unit-tests --enable-replication --enable-nntp --enable-murder --enable-idled --enable-xapian --enable-autocreate --enable-backup --enable-silent-rules
-make lex-fix
+export XAPIAN_CONFIG=$CYRUSLIBS/bin/xapian-config-1.5
+
+./configure --prefix=$TARGET --enable-jmap --enable-http --enable-calalarmd --enable-unit-tests --enable-replication --enable-nntp --enable-murder --enable-idled --enable-xapian --enable-autocreate --enable-backup --enable-silent-rules --enable-autocreate
 make -j 8
+make sieve/test
 make -j 8 check
 sudo make install
 sudo make install-binsymlinks
 sudo cp tools/mkimap /usr/cyrus/bin/mkimap
+sudo /bin/bash ./libtool --mode=install install -o root -m 755 sieve/test $TARGET/bin/sieve-test
 
 # ipv6 is a crime
 grep -v ::1 /etc/hosts > /tmp/hosts
