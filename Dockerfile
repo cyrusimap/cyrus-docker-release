@@ -152,18 +152,13 @@ RUN git config --global http.sslverify false && \
     git clone https://github.com/cyrusimap/cyrus-docker-test-server.git \
     cyrus-docker-test-server.git
 
-RUN apt-get install -y gperf fig2gif python3-sphinx libjansson-dev python3-git
+RUN apt-get install -y gperf fig2dev python3-sphinx libjansson-dev python3-git
 
 RUN cpanm Pod::POM::View::Restructured
 
-EXPOSE 8001
-EXPOSE 8024
-EXPOSE 8080
-EXPOSE 8110
-EXPOSE 8143
+RUN git config --global http.sslverify false && \
+    git clone https://github.com/cyrusimap/cyrus-docker-release.git \
+    cyrus-docker-release.git
 
-ENV SERVERNAME=cyrus-docker-test-server
-ENV DEFAULTDOMAIN=example.com
-
-ENTRYPOINT [ "/srv/cyrus-docker-test-server.git/entrypoint.sh" ]
+ENTRYPOINT [ "/srv/cyrus-docker-release.git/entrypoint.sh" ]
 
