@@ -36,4 +36,5 @@ sudo mv /tmp/hosts /etc/hosts
 # now that Cyrus is installed, let's test it with a full cassandane run!
 sudo mkdir -p /tmp/cass
 cd /srv/cyrus-imapd.git/cassandane/
+make -j 8
 sudo -u cyrus ./testrunner.pl -f pretty -j 4 --config /srv/cyrus-docker-release.git/cassandane.ini
