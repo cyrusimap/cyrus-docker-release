@@ -40,4 +40,5 @@ cat /tmp/hosts > /etc/hosts
 sudo install -o cyrus -g mail -d /tmp/cass
 cd /srv/cyrus-imapd.git/cassandane/
 make -j 8
-sudo -u cyrus ./testrunner.pl -f pretty -j 4 --config /srv/cyrus-docker-release.git/cassandane.ini
+export PERL5LIB=`echo /usr/cyrus/share/perl/*`
+sudo -u cyrus ./testrunner.pl -f pretty -j 8 --config /srv/cyrus-docker-release.git/cassandane.ini
