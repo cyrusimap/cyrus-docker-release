@@ -196,8 +196,8 @@ RUN cpanm --installdeps .
 # for cassandane
 RUN apt-get -y install libxml-simple-perl libdata-guid-perl
 RUN cpanm IO::File::fcntl
-WORKDIR /tmp
 
+WORKDIR /srv/cyrus-docker-release.git/
 
 ENTRYPOINT [ "/srv/cyrus-docker-release.git/entrypoint.sh" ]
 

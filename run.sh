@@ -29,7 +29,11 @@ sudo make install
 sudo make install-binsymlinks
 sudo cp tools/mkimap /usr/cyrus/bin/mkimap
 
+# ipv6 is a crime
+grep -v ::1 /etc/hosts > /tmp/hosts
+sudo mv /tmp/hosts /etc/hosts
+
 # now that Cyrus is installed, let's test it with a full cassandane run!
 sudo mkdir -p /tmp/cass
-cd /src/cyrus-imapd.git/cassandane/
-./testrunner.pl -f pretty -j 4 --config /src/cyrus-docker-release.git/cassandane.ini
+cd /srv/cyrus-imapd.git/cassandane/
+sudo -u cyrus ./testrunner.pl -f pretty -j 4 --config /srv/cyrus-docker-release.git/cassandane.ini
