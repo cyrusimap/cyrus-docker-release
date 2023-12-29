@@ -1,6 +1,9 @@
 #!/bin/bash
 
+
 cd /srv/cyrus-imapd.git
+
+set +e
 
 autoreconf -i -s
 ./configure --enable-maintainer-mode
@@ -26,4 +29,7 @@ sudo make install
 sudo make install-binsymlinks
 sudo cp tools/mkimap /usr/cyrus/bin/mkimap
 
-# now that Cyrus is installed (the only thing we were missing here was the autoreconf
+# now that Cyrus is installed, let's test it with a full cassandane run!
+sudo mkdir -p /tmp/cass
+cd /src/cyrus-imapd.git/cassandane/
+./testrunner.pl -f pretty -j 4 --config /src/cyrus-docker-release.git/cassandane.ini

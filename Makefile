@@ -5,4 +5,4 @@ upload:
 	sudo docker push       ghcr.io/cyrusimap/cyrus-docker-release:latest
 
 run:
-	sudo docker run -it    ghcr.io/cyrusimap/cyrus-docker-release:latest
+	sudo docker run -it --mount type=tmpfs,destination=/tmp ghcr.io/cyrusimap/cyrus-docker-release:latest

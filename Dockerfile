@@ -160,5 +160,31 @@ RUN git config --global http.sslverify false && \
     git clone https://github.com/cyrusimap/cyrus-docker-release.git \
     cyrus-docker-release.git
 
+RUN git config --global http.sslverify false && \
+    git clone https://github.com/dovecot/core.git \
+    dovecot.git
+
+RUN git config --global http.sslverify false && \
+    git clone https://github.com/cyrusimap/imaptest.git \
+    imaptest.git
+
+WORKDIR /srv/dovecot.git
+RUN git fetch
+# NOTE: change this only after testing
+RUN git checkout c6829c3d67fcbc20aa4bb7fb6daed0060e9f6341
+RUN ./autogen.sh
+RUN ./configure --enable-silent-rules
+RUN make -j 8
+
+WORKDIR /srv/imaptest.git
+RUN git fetch
+RUN git checkout origin/cyrus
+RUN sh autogen.sh
+RUN ./configure --enable-silent-rules --with-dovecot=/srv/dovecot.git
+RUN make -j 8
+# need to run it once as root to link up libs
+RUN src/imaptest || true
+
+
 ENTRYPOINT [ "/srv/cyrus-docker-release.git/entrypoint.sh" ]
 
